@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pose Detection - Curl Counter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        #video-container {
+            background-color: black;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        #video-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        #count-display {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        #count-box {
+            font-size: 48px;
+            color: #2e8b57;
+            font-weight: bold;
+        }
+
+        #label {
+            font-size: 24px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <img src="{{ url_for('video_feed') }}" alt="Pose Detection Feed" />
+    </div>
+
+    <div id="count-display">
+        <div id="count-box">0</div>
+        <div id="label">Curl Count</div>
+    </div>
+
+    <script>
+        function updateCount() {
+            fetch('/count')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('count-box').innerText = data.count;
+                })
+                .catch(error => console.error('Error fetching count:', error));
+        }
+
+        // Update count every second
+        setInterval(updateCount, 1000);
+        updateCount(); // Initial call
+    </script>
+</body>
+</html>
